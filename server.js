@@ -1,3 +1,4 @@
+import e from "express";
 import express, { json, request, response } from "express";
 import mongoose from "mongoose";
 
@@ -51,9 +52,7 @@ app.get("/games", (request,response) => {
   })
 
 app.post("/cart", (request, response) => {
-    const cartToPost = new Cart({name : request.body.name, price : request.body.price, platform : request.body.platform, lang : request.body.lang, picture : request.body.picture, amount : request.body.amount})
-    cartToPost.save()
-    response.send("Cart created")
+    Cart.collection.insertOne(request.body).then(response.send("Cart created"))
 })
 
 app.delete("/cart/:id", (request, response) => {
