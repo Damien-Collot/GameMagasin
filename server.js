@@ -1,7 +1,5 @@
-import e from "express";
 import express, { json, request, response } from "express";
 import mongoose from "mongoose";
-import { ObjectId } from "mongodb";
 
 const app = express()
 
@@ -64,36 +62,32 @@ app.get("/game/id/:id", (request,response) => {
     Game.findById(request.params.id).then((game) => response.json(game))
   })
 
-app.get("/game/name/:name", (request,response) => {
+app.get("/games/name/:name", (request,response) => {
     Game.find({"name" : request.params.name}).then((game) => response.json(getAffichGame(game)))
   })
 
-app.get("/game/platform/:platform", (request,response) => {
+app.get("/games/platform/:platform", (request,response) => {
     Game.find({"platform" : {$in : request.params.platform}}).then((game) => response.json(getAffichGame(game)))
   })
 
-app.get("/game/genre/:genre", (request,response) => {
+app.get("/games/genre/:genre", (request,response) => {
     Game.find({"genre" : {$in : request.params.genre}}).then((game) => response.json(getAffichGame(game)))
   })
 
-app.get("/game/:prixMin/:prixMax", (request, response) => {
+app.get("/games/:prixMin/:prixMax", (request, response) => {
 		Game.find({"price" : {'$gt': request.params.prixMin, '$lt': request.params.prixMax}}).sort({"price" : 1}).then((game)=>response.json(getAffichGame(game)))
 })
 
-app.put("/cart/:id/:amount/:platform", (request, response)=> {
-	Cart.findByIdAndUpdate(request.params.id, {amount : request.params.amount, platform : request.params.platform}).then(response.send("Jeu modifié."))
+app.put("/cart/:id", (request, response)=> {
+	Cart.findByIdAndUpdate(request.params.id, {amount : request.body.amount, platform : request.body.platform}).then(response.send("Jeu modifié."))
 })
 
 app.get("/cart", (request, response) =>{
-	Cart.find().then((game)=> response.json(getAffichGame(game)))
+	Cart.find().then((game)=> response.json(game))
 })
 
-app.delete("/carts/delete", (request, response)=>{
+app.delete("/cart", (request, response)=>{
 	Cart.deleteMany().then(response.send("Élements suprimés"))
-})
-
-app.delete("/cart/delete/:id", (request, response)=>{
-	Cart.deleteOne({id : request.params.id}).then(response.send("Élément supprimé"))
 })
 
 app.listen(3000, () => {
