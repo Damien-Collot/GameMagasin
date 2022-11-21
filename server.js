@@ -1,7 +1,6 @@
 import e from "express";
 import express, { json, request, response } from "express";
 import mongoose from "mongoose";
-import { ObjectId } from "mongodb";
 
 const app = express()
 
@@ -59,7 +58,7 @@ app.post("/cart", (request, response) => {
 })
 
 app.delete("/cart/:id", (request, response) => {
-    Cart.deleteOne({ "_id" : ObjectId(request.params.id) }).then( response.send("game deleted"))
+    Cart.findByIdAndDelete(request.params.id).then( response.send("game deleted"))
 })
 
 app.get("/game/id/:id", (request,response) => {
