@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 import Games from './games.json' assert {type: 'json'}
 
-mongoose.connect("mongodb://127.0.0.1:27017/Magasin")
+mongoose.connect("mongodb://127.0.0.1:27017/Magasin",function(){
+    /* Drop the DB */
+    mongoose.connection.db.dropDatabase();
+});
 
 const Game = mongoose.model("Game", { 
     name :  String,
