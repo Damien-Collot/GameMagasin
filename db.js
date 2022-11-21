@@ -22,15 +22,6 @@ const Game = mongoose.model("Game", {
 	year : Number
 })
 
-const Cart = mongoose.model("Cart", {
-    Name : String,
-	price : Number,
-	platform : String,
-	lang : String,
-	picture : String,
-	amount : Number
-})
-
 
 Games.games.forEach(e => {
     const gameToSave = new Game({name : e.name, studio: e.studio, description : e.description, platform : e.platform, genre : e.genre, pegi : e.pegi, price : e.price, score : e.score, lang : e.lang, picture : e.picture, year : e.year })

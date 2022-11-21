@@ -1,3 +1,4 @@
+import e from "express";
 import express, { json, request, response } from "express";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
@@ -37,8 +38,30 @@ const Cart = mongoose.model("Cart", {
 })
 
 app.get("/games", (request,response) => {
-    Game.find().then((games) => response.json(games))
+    Game.find().then((games) => {
+    const listGames = []
+    games.forEach(g => {
+        const gameAffich = { "_id" : g._id, name : g.name, picture : g.picture, price : g.price}
+        listGames.push(gameAffich)
+    })
+    response.json(listGames)
+    })
   })
+
+app.post("/cart", (request, response) => {
+    const cartToPost = new Cart({name : request.body.name, price : request.body.price, platform : request.body.platform, lang : request.body.lang, picture : request.body.picture, amount : request.body.amount})
+    cartToPost.save()
+    response.send("Cart created")
+})
+
+app.delete("/cart/:id", (request, response) => {
+    Cart.deleteOne({ "_id" : ObjectId(request.params.id) }, function(err, result) {
+    if (err) {
+        response.send(err);
+    } else {
+        response.send(result);
+    }});
+})
 
 app.get("/game/id/:id", (request,response) => {
     Game.find({"_id" : ObjectId(request.params.id)}).then((game) => response.json(game))
