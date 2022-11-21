@@ -1,6 +1,7 @@
 import e from "express";
 import express, { json, request, response } from "express";
 import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 
 const app = express()
 
@@ -74,6 +75,23 @@ app.get("/game/platform/:platform", (request,response) => {
 app.get("/game/genre/:genre", (request,response) => {
     Game.find({"genre" : {$in : request.params.genre}}).then((game) => response.json(getAffichGame(game)))
   })
+
+app.get("/game/:prixMin/:prixMax", (request, response) => {
+		Game.find({"price" : {'$gt': request.params.prixMin, '$lt': request.params.prixMax}}).sort({"price" : 1}).then((game)=>response.json(game))
+})
+
+// with body {amount : nulber, platform : number}
+app.put("/cart/:id/:amount/:platform", (request, response)=> {
+	Cart.findByIdAndUpdate(request.params.id, {amount : request.params.amount, platform : request.params.platform}).then(response.send("Jeu ajouté au panier."))
+})
+
+app.get("/cart", (request, response) =>{
+	Cart.find().then((game)=> response.json(game))
+})
+
+app.delete("/cart/deleteAll", (request, response)=>{
+	Cart.deleteMany().then(response.send("elements suprimés"))
+})
 
 
 app.listen(3000, () => {
