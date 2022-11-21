@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Games from './games.json' assert {type: 'json'}
 
-mongoose.connect("mongodb://localhost:27017/Magasin").then((e) => {
+mongoose.connect("mongodb://127.0.0.1:27017/Magasin").then((e) => {
   console.log("Connected")
 })
 .catch((e) => {
