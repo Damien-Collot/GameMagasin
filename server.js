@@ -77,22 +77,24 @@ app.get("/game/genre/:genre", (request,response) => {
   })
 
 app.get("/game/:prixMin/:prixMax", (request, response) => {
-		Game.find({"price" : {'$gt': request.params.prixMin, '$lt': request.params.prixMax}}).sort({"price" : 1}).then((game)=>response.json(game))
+		Game.find({"price" : {'$gt': request.params.prixMin, '$lt': request.params.prixMax}}).sort({"price" : 1}).then((game)=>response.json(getAffichGame(game)))
 })
 
-// with body {amount : nulber, platform : number}
 app.put("/cart/:id/:amount/:platform", (request, response)=> {
-	Cart.findByIdAndUpdate(request.params.id, {amount : request.params.amount, platform : request.params.platform}).then(response.send("Jeu ajouté au panier."))
+	Cart.findByIdAndUpdate(request.params.id, {amount : request.params.amount, platform : request.params.platform}).then(response.send("Jeu modifié."))
 })
 
 app.get("/cart", (request, response) =>{
-	Cart.find().then((game)=> response.json(game))
+	Cart.find().then((game)=> response.json(getAffichGame(game)))
 })
 
-app.delete("/cart/deleteAll", (request, response)=>{
-	Cart.deleteMany().then(response.send("elements suprimés"))
+app.delete("/carts/delete", (request, response)=>{
+	Cart.deleteMany().then(response.send("Élements suprimés"))
 })
 
+app.delete("/cart/delete/:id", (request, response)=>{
+	Cart.deleteOne({id : request.params.id}).then(response.send("Élément supprimé"))
+})
 
 app.listen(3000, () => {
     console.log(`Server Started at http://localhost:${3000}`)
