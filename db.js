@@ -22,6 +22,7 @@ const Game = mongoose.model("Game", {
 	year : Number
 })
 
+Game.deleteMany();
 
 Games.games.forEach(e => {
     const gameToSave = new Game({name : e.name, studio: e.studio, description : e.description, platform : e.platform, genre : e.genre, pegi : e.pegi, price : e.price, score : e.score, lang : e.lang, picture : e.picture, year : e.year })
