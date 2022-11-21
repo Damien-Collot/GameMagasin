@@ -1,4 +1,3 @@
-import e from "express";
 import express, { json, request, response } from "express";
 import mongoose from "mongoose";
 
