@@ -1,11 +1,7 @@
-import express, { json, request, response } from "express";
 import mongoose from "mongoose";
+import Games from './games.json' assert {type: 'json'}
 
-const app = express()
-
-app.use(json())
-
-mongoose.connect("mongodb://127.0.0.1:27017/Magasin").then((e) => {
+mongoose.connect("mongodb://localhost:27017/Magasin").then((e) => {
   console.log("Connected")
 })
 .catch((e) => {
@@ -35,10 +31,8 @@ const Cart = mongoose.model("Cart", {
 	amount : Number
 })
 
-app.get("/games", (request,response) => {
-    Game.find().then((games) => response.json(games))
-  })
 
-app.listen(3000, () => {
-    console.log(`Server Started at http://localhost:${3000}`)
+Games.games.forEach(e => {
+    const gameToSave = new Game({name : e.name, studio: e.studio, description : e.description, platform : e.platform, genre : e.genre, pegi : e.pegi, price : e.price, score : e.score, lang : e.lang, picture : e.picture, year : e.year })
+    gameToSave.save()
   })
