@@ -62,7 +62,7 @@ app.delete("/cart/:id", (request, response) => {
 })
 
 app.get("/game/id/:id", (request,response) => {
-    Game.find({"_id" : ObjectId(request.params.id)}).then((game) => response.json(getAffichGame(game)))
+    Game.findById(request.params.id).then((game) => response.json(game))
   })
 
 app.get("/game/name/:name", (request,response) => {
