@@ -37,14 +37,18 @@ const Cart = mongoose.model("Cart", {
 	amount : Number
 })
 
-app.get("/games", (request,response) => {
-    Game.find().then((games) => {
-    const listGames = []
+function getAffichGame(games) {
+    const listGames = [];
     games.forEach(g => {
         const gameAffich = { "_id" : g._id, name : g.name, picture : g.picture, price : g.price}
         listGames.push(gameAffich)
     })
-    response.json(listGames)
+    return listGames;
+  }
+
+app.get("/games", (request,response) => {
+    Game.find().then((games) => {
+    response.json(getAffichGame(games));
     })
   })
 
@@ -55,12 +59,7 @@ app.post("/cart", (request, response) => {
 })
 
 app.delete("/cart/:id", (request, response) => {
-    Cart.deleteOne({ "_id" : ObjectId(request.params.id) }, function(err, result) {
-    if (err) {
-        response.send(err);
-    } else {
-        response.send(result);
-    }});
+    Cart.deleteOne({ "_id" : ObjectId(request.params.id) }).then( response.send("game deleted"))
 })
 
 app.get("/game/id/:id", (request,response) => {
