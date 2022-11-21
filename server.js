@@ -63,19 +63,19 @@ app.delete("/cart/:id", (request, response) => {
 })
 
 app.get("/game/id/:id", (request,response) => {
-    Game.find({"_id" : ObjectId(request.params.id)}).then((game) => response.json(game))
+    Game.find({"_id" : ObjectId(request.params.id)}).then((game) => response.json(getAffichGame(game)))
   })
 
 app.get("/game/name/:name", (request,response) => {
-    Game.find({"name" : request.params.name}).then((game) => response.json(game))
+    Game.find({"name" : request.params.name}).then((game) => response.json(getAffichGame(game)))
   })
 
 app.get("/game/platform/:platform", (request,response) => {
-    Game.find({"platform" : {$in : request.params.platform}}).then((game) => response.json(game))
+    Game.find({"platform" : {$in : request.params.platform}}).then((game) => response.json(getAffichGame(game)))
   })
 
 app.get("/game/genre/:genre", (request,response) => {
-    Game.find({"genre" : {$in : request.params.genre}}).then((game) => response.json(game))
+    Game.find({"genre" : {$in : request.params.genre}}).then((game) => response.json(getAffichGame(game)))
   })
 
 
