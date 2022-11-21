@@ -18,5 +18,10 @@
     "url": "git+https://github.com/Damien-Collot/GameMagasin.git"
   },
   "license": "ISC",
-  "homepage": "https://github.com/Damien-Collot/GameMagasin#readme"
+  "homepage": "https://github.com/Damien-Collot/GameMagasin#readme",
+  "bugs": {
+    "url": "https://github.com/Damien-Collot/GameMagasin/issues"
+  },
+  "keywords": [],
+  "author": ""
 }
