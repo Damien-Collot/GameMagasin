@@ -27,7 +27,7 @@ const Game = mongoose.model("Game", {
 })
 
 const Cart = mongoose.model("Cart", {
-    name : String,
+  name : String,
 	price : Number,
 	platform : String,
 	lang : String,
@@ -50,7 +50,7 @@ app.get("/games", (request,response) => {
     })
   })
 
-app.post("/cart", (request, response) => {
+app.post("/cart/:userid/", (request, response) => {
     Cart.collection.insertOne(request.body).then(response.send("Cart created"))
 })
 
@@ -78,15 +78,19 @@ app.get("/games/:prixMin/:prixMax", (request, response) => {
 		Game.find({"price" : {'$gt': request.params.prixMin, '$lt': request.params.prixMax}}).sort({"price" : 1}).then((game)=>response.json(getAffichGame(game)))
 })
 
-app.put("/cart/:id", (request, response)=> {
+app.get("/cart/:userid", (request, response) => {
+  Cart.findById(request.params.userid).then((cart) => response.json(cart))
+})
+
+app.put("/cart/:userid/", (request, response)=> {
 	Cart.findByIdAndUpdate(request.params.id, {amount : request.body.amount, platform : request.body.platform}).then(response.send("Jeu modifié."))
 })
 
-app.get("/cart", (request, response) =>{
+app.get("/carts", (request, response) =>{
 	Cart.find().then((game)=> response.json(game))
 })
 
-app.delete("/cart", (request, response)=>{
+app.delete("/cart/:userid", (request, response)=>{
 	Cart.deleteMany().then(response.send("Élements suprimés"))
 })
 
