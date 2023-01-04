@@ -27,12 +27,18 @@ const Game = mongoose.model("Game", {
 })
 
 const Cart = mongoose.model("Cart", {
+  userId : String,
   name : String,
 	price : Number,
 	platform : String,
 	lang : String,
 	picture : String,
 	amount : Number
+})
+
+const User = mongoose.model("User", {
+  name : String,
+  pwd : String
 })
 
 function getAffichGame(games) {
@@ -44,6 +50,37 @@ function getAffichGame(games) {
     return listGames;
   }
 
+
+// Login and sign up
+app.get("/login/:name/:pwd", (request, response) => {
+  User.findOne({name : request.params.name, pwd: request.params.pwd})
+    .then((user) => {
+        // if exist
+        if(user) {
+            response.json(user);
+        }
+        else {
+            return response.status(403).json({message: 'Sorry, bad credentials'})
+        }
+    })
+})
+
+app.post("/signUp", (request, response) => {
+  User.findOne({name : request.body.name, pwd: request.body.pwd})
+        .then((user) => {
+
+          // if not still exist
+          if(!user) {
+              // create and save new user
+              const user_to_save = new User({name: request.body.name, pwd: request.body.pwd});
+              user_to_save.save().then(response.json(user));
+          }
+          else {
+              return response.status(403).json({message: 'Sorry, this user already exist'})
+          }
+      })
+})
+
 app.get("/games", (request,response) => {
     Game.find().then((games) => {
     response.json(getAffichGame(games));
@@ -51,14 +88,16 @@ app.get("/games", (request,response) => {
   })
 
 app.post("/cart/:userid/", (request, response) => {
-    Cart.collection.insertOne(request.body).then(response.send("Cart created"))
+    var json = request.body;
+    json["userId"] = request.params.userid;
+    Cart.collection.insertOne(json).then(response.send("Cart created"))
 })
 
 app.delete("/cart/:id", (request, response) => {
     Cart.findByIdAndDelete(request.params.id).then( response.send("game deleted"))
 })
 
-app.get("/game/id/:id", (request,response) => {
+app.get("/game/:id", (request,response) => {
     Game.findById(request.params.id).then((game) => response.json(game))
   })
 
@@ -79,10 +118,10 @@ app.get("/games/:prixMin/:prixMax", (request, response) => {
 })
 
 app.get("/cart/:userid", (request, response) => {
-  Cart.findById(request.params.userid).then((cart) => response.json(cart))
+  Cart.find({userId : request.params.userid}).then((cart) => response.json(cart))
 })
 
-app.put("/cart/:userid/", (request, response)=> {
+app.put("/cart/:id/", (request, response)=> {
 	Cart.findByIdAndUpdate(request.params.id, {amount : request.body.amount, platform : request.body.platform}).then(response.send("Jeu modifié."))
 })
 
@@ -91,7 +130,7 @@ app.get("/carts", (request, response) =>{
 })
 
 app.delete("/cart/:userid", (request, response)=>{
-	Cart.deleteMany().then(response.send("Élements suprimés"))
+	Cart.deleteMany({userId : request.params.userid}).then(response.send("Élements suprimés"))
 })
 
 app.listen(3000, () => {
