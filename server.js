@@ -117,7 +117,7 @@ app.get("/games/:prixMin/:prixMax", (request, response) => {
 		Game.find({"price" : {'$gt': request.params.prixMin, '$lt': request.params.prixMax}}).sort({"price" : 1}).then((game)=>response.json(getAffichGame(game)))
 })
 
-app.get("/cart/:userid", (request, response) => {
+app.get("/carts/:userid", (request, response) => {
   Cart.find({userId : request.params.userid}).then((cart) => response.json(cart))
 })
 
