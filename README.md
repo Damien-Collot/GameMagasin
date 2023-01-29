@@ -4,6 +4,10 @@ Vous trouverez ici le répertoire du projet GameMagsin réalisé par COLLOT Dami
 
 Ce projet est un magsin de jeux vidéos en ligne.
 
+## Prérequis
+
+avoir une base de données MongoDb contactable sur l'url '127.0.0.1:27017'
+
 
 ## Initialisation
 
