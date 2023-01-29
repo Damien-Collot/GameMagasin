@@ -3,7 +3,6 @@ import Games from './games.json' assert {type: 'json'}
 
 mongoose.connect("mongodb://127.0.0.1:27017/Magasin",function(){
     /* Drop the DB */
-    mongoose.connection.db.dropDatabase();
 });
 
 const Game = mongoose.model("Game", { 
@@ -29,12 +28,13 @@ const Cart = mongoose.model("Cart", {
 	amount : Number
 })
 
-Game.deleteMany()
-Cart.deleteMany()
+await Game.collection.deleteMany()
+await Cart.collection.deleteMany()
 
-Games.games.forEach(e => {
-    const gameToSave = new Game({name : e.name, studio: e.studio, description : e.description, platform : e.platform, genre : e.genre, pegi : e.pegi, price : e.price, score : e.score, lang : e.lang, picture : e.picture, year : e.year })
-    gameToSave.save()
-  })
-
-console.log("Fini")
+Game.create(Games.games, (error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Fini");
+    }
+});
