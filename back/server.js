@@ -130,7 +130,7 @@ app.get("/carts", (request, response) =>{
 	Cart.find().then((game)=> response.json(game))
 })
 
-app.delete("/cart/:userid", (request, response)=>{
+app.delete("/carts/:userid", (request, response)=>{
 	Cart.deleteMany({userId : request.params.userid}).then(response.send("Élements suprimés"))
 })
 
